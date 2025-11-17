@@ -5,7 +5,7 @@ services:
     image: nginx:1.25-alpine
     restart: unless-stopped
     volumes:
-      - ./api:/var/www/html
+      - ./:/var/www/html
       - ./deploy/nginx:/etc/nginx/conf.d:ro
     depends_on:
       - php
@@ -15,9 +15,9 @@ services:
       context: ./deploy/php
       dockerfile: Dockerfile
     restart: unless-stopped
-    working_dir: /var/www/html
+    working_dir: /var/www/html/api
     volumes:
-      - ./api:/var/www/html
+      - ./:/var/www/html
     extra_hosts:
       - "host.docker.internal:host-gateway"
     dns:
