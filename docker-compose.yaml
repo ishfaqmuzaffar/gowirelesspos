@@ -6,7 +6,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./api:/var/www/html
-      - ./deploy/nginx.conf:/etc/nginx/conf.d/pos.conf:ro
+      - ./deploy/nginx:/etc/nginx/conf.d:ro
     depends_on:
       - php
 
