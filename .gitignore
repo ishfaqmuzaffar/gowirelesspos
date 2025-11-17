@@ -1,0 +1,10 @@
+<< 'EOF'
+/.idea/
+/.vscode/
+/node_modules/
+/vendor/
+/storage/
+/.env
+.DS_Store
+/dist/
+EOF

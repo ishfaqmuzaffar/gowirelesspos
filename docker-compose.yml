@@ -1,0 +1,44 @@
+services:
+  nginx:
+    image: nginx:1.25-alpine
+    ports:
+      - "8080:80"
+      - "5173:5173"
+    volumes:
+      - ./api:/var/www/html
+      - ./deploy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+  php:
+    build:
+      context: ./deploy/php
+      dockerfile: Dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - ./api:/var/www/html
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: gowireless
+      POSTGRES_USER: gowireless
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U gowireless"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+volumes:
+  dbdata:
